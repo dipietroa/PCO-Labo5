@@ -6,8 +6,15 @@
 
 class WaitingQueue
 {
+private:
     QString name;
     QStringList threadNames;
+
+public:
+    WaitingQueue(QString name);
+    void addThread(const QString& objectName);
+    bool deleteThread(const QString& objectName);
+    const QString getOName();
 };
 
 class WaitingLogger
@@ -43,6 +50,9 @@ protected:
     virtual void updateView();
 
     QList<WaitingQueue *> queues;
+
+private:
+    WaitingQueue* getQueueByObjName(const QString& objectName);
 
 };
 
