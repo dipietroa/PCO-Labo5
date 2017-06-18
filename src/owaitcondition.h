@@ -5,7 +5,7 @@
 #include <QString>
 #include "omutex.h"
 
-class OWaitCondition
+class OWaitCondition : public QWaitCondition
 {
 public:
     OWaitCondition(QString name);

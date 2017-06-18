@@ -5,7 +5,7 @@
 #include <QThread>
 #include "waitinglogger.h"
 
-class OSemaphore
+class OSemaphore : public QSemaphore
 {
 public:
     OSemaphore(int n = 0, QString name = "");

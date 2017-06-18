@@ -1,15 +1,28 @@
 #ifndef OHOAREMONITOR_H
 #define OHOAREMONITOR_H
 
+#include <QString>
+#include <QSemaphore>
+#include <QMutex>
+#include <QThread>
+#include "waitinglogger.h"
 
 class OHoareMonitor
 {
 protected:
 
-    class Condition;
+    class Condition
+    {
+        friend OHoareMonitor;
+    public:
+        Condition();
+    private:
+        QSemaphore waitingSem;
+        int nbWaiting;
+    };
 
 public:
-    OHoareMonitor();
+    OHoareMonitor(QString name);
 
     /**
      * This function has to be called at the beginning of each function being
@@ -38,6 +51,11 @@ public:
      */
     void signal(Condition &cond);
 
+private:
+    QSemaphore monitorMutex;
+    QSemaphore monitorSignale;
+    int monitorNbSignale;
+    QString _name;
 };
 
 #endif // OHOAREMONITOR_H

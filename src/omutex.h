@@ -6,7 +6,7 @@
 #include "waitinglogger.h"
 
 
-class OMutex
+class OMutex : public QMutex
 {
 
 private:
