@@ -7,14 +7,17 @@
 class ReaderWriterPrioReaderHoare : public AbstractReaderWriter
 {
 protected:
-    OHoareMonitor::Condition readerBlocker;
+    OHoareMonitor::Condition readerBlocker; 
     OHoareMonitor::Condition writerBlocker;
     OHoareMonitor hoaremonitor;
 
-    int nbReaders;
-    bool oneWriter;
+    int nbReaders; //nombre de lecteur actifs
+    bool oneWriter; //true s'il y a un redacteur actif
 
 public:
+    /**
+     * @brief ReaderWriterPrioReaderHoare constructeur de la classe
+     */
     ReaderWriterPrioReaderHoare();
 
     /**

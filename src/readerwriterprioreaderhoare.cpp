@@ -10,22 +10,22 @@ void ReaderWriterPrioReaderHoare::lockReading() {
     SynchroController::getInstance()->pause();
     hoaremonitor.monitorIn();
 
-    if (oneWriter) {
+    if (oneWriter) {// si il y a un Redacteur
         hoaremonitor.wait(readerBlocker);
         hoaremonitor.signal(readerBlocker);
     }
-    else {
+    else { {// sinon un lecteur en plus
         nbReaders++;
         hoaremonitor.monitorOut();
     }
 
     ((ReadWriteLogger*)WaitingLogger::getInstance())->addResourceAccess(QThread::currentThread()->objectName());
+    }
 }
-
 void ReaderWriterPrioReaderHoare::lockWriting(){
     SynchroController::getInstance()->pause();
     hoaremonitor.monitorIn();
-    if (oneWriter || (nbReaders>0)) {
+    if (oneWriter || (nbReaders>0)) {//si aucun redacteur ou s'il y a des lecteurs
 
         hoaremonitor.wait(writerBlocker);
         hoaremonitor.signal(writerBlocker);
@@ -57,7 +57,7 @@ void ReaderWriterPrioReaderHoare::unlockWriting(){
     hoaremonitor.monitorIn();
     oneWriter=false;
     hoaremonitor.signal(readerBlocker);
-    if (nbReaders>0)
+    if (nbReaders>0)//s'il y a des lecteurs
     {
              hoaremonitor.signal(readerBlocker);
     }
