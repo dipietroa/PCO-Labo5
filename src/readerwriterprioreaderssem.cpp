@@ -1,40 +1,79 @@
 #include "readerwriterprioreaderssem.h"
 
-ReaderWriterPrioReadersSem::ReaderWriterPrioReadersSem() : mutexReaders(1, QString::fromStdString("mutexReaders")),
-                                                     mutexWriters(1, QString::fromStdString("mutexWriters")),
-                                                     writer(1, QString::fromStdString("writer")),
-                                                     nbReaders(0){}
+ReaderWriterPrioReadersSem::ReaderWriterPrioReadersSem() :
+  mutex(1, "mutex"),
+  nbReaders(0),
+  nbReadersWaiting(0),
+  nbWritersWaiting(0),
+  readerBlocker(0, "readerBlocker"),
+  writerBlocker(0, "writerBlocker"),
+  oneWriter(false) {}
+
 
 ReaderWriterPrioReadersSem::~ReaderWriterPrioReadersSem(){
 
 }
 
 void ReaderWriterPrioReadersSem::lockReading(){
-    mutexReaders.acquire();
-    nbReaders++;
+    mutex.acquire();
 
-    if (nbReaders==1)
-        writer.acquire();
+    if (oneWriter) {
+        nbReadersWaiting++;
+        mutex.release(); // ouverture
+        readerBlocker.acquire();
+    }
+    else {
+        nbReaders++;
+        mutex.release();
+    }
 
-    mutexReaders.release();
+    ((ReadWriteLogger*)WaitingLogger::getInstance())->addResourceAccess(QThread::currentThread()->objectName());
 }
 
 void ReaderWriterPrioReadersSem::lockWriting(){
-    mutexWriters.acquire();
-    writer.acquire();
+    mutex.acquire();
+    if (oneWriter || (nbReaders>0) || (nbReadersWaiting>0)) {
+        nbWritersWaiting++;
+        mutex.release(); // ouverture
+        writerBlocker.acquire();
+    }
+    else {
+        oneWriter=true;
+        mutex.release();
+    }
+    ((ReadWriteLogger*)WaitingLogger::getInstance())->addResourceAccess(QThread::currentThread()->objectName());
 }
 
 void ReaderWriterPrioReadersSem::unlockReading(){
-    mutexReaders.acquire();
-    nbReaders -= 1;
-
-    if (nbReaders==0)
-        writer.release();
-
-    mutexReaders.release();
+    ((ReadWriteLogger*)WaitingLogger::getInstance())->removeResourceAccess(QThread::currentThread()->objectName());
+    mutex.acquire();
+    nbReaders--;
+    if (nbReaders==0) {
+        if (nbWritersWaiting>0) {
+            oneWriter=true;
+            nbWritersWaiting--;
+            writerBlocker.release();
+        }
+    }
+    mutex.release();
 }
 
 void ReaderWriterPrioReadersSem::unlockWriting(){
-    writer.release();
-    mutexWriters.release();
+    ((ReadWriteLogger*)WaitingLogger::getInstance())->removeResourceAccess(QThread::currentThread()->objectName());
+    mutex.acquire();
+    oneWriter=false;
+    if (nbReadersWaiting>0) {
+        for(int i=0;i<nbReadersWaiting;i++)
+            readerBlocker.release();
+        nbReaders=nbReadersWaiting;
+        nbReadersWaiting=0;
+    }
+    else {
+        if (nbWritersWaiting>0) {
+            oneWriter=true;
+            nbWritersWaiting--;
+            writerBlocker.release();
+        }
+    }
+    mutex.release();
 }

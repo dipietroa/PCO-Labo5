@@ -67,6 +67,7 @@ void WaitingLogger::removeWaiting(const QString &threadName, const QString &obje
         if(!wq->deleteThread(threadName))
             throw new std::runtime_error("Erreur, le thread '" +threadName.toStdString() +
                                          "' n'est pas en attente sur '" + objectName.toStdString() +"' !");
+    updateView();
     mutex.unlock();
 }
 

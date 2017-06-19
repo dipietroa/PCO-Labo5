@@ -17,8 +17,9 @@ SOURCES += src/main.cpp\
     src/owaitcondition.cpp \
     src/ohoaremonitor.cpp \
     src/abstractreaderwriter.cpp \
+    src/taskrw.cpp \
     src/readerwriterprioreaderssem.cpp \
-    src/taskrw.cpp
+    src/readerwriterequalpriosem.cpp
 
 HEADERS  +=  \
     src/waitinglogger.h \
@@ -29,4 +30,5 @@ HEADERS  +=  \
     src/ohoaremonitor.h \
     src/abstractreaderwriter.h \
     src/readerwriterprioreaderssem.h \
-    src/taskrw.h
+    src/taskrw.h \
+    src/readerwriterequalpriosem.h

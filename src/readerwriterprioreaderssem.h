@@ -14,10 +14,14 @@ public:
     void unlockReading();
     void unlockWriting();
 protected:
-    OSemaphore mutexReaders;
-    OSemaphore mutexWriters;
-    OSemaphore writer;
+    OSemaphore mutex;
+    OSemaphore readerBlocker;
+    OSemaphore writerBlocker;
     int nbReaders;
+    int nbReadersWaiting;
+    int nbWritersWaiting;
+    bool oneWriter;
+
 };
 
 #endif // READERWRITERPRIOREADERS_H
