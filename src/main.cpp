@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
     //parmis celles implémentées pour tester un autre protocole lecteur
     //rédacteur avec une gestion différente des priorités ou un autre type
     //d'objets de synchronisation
-    AbstractReaderWriter* resourceManager = new ReaderWriterEqualPrioMesa();
+    AbstractReaderWriter* resourceManager = new ReaderWriterPrioReadersSem();
 
     // Create the threads
     TaskWriter* threadsWriter[NB_WRITERS];
@@ -58,11 +58,11 @@ int main(int argc, char *argv[])
 
     // Kill the threads
     for(int i = 0; i < NB_READERS; i++) {
-        threadsReader[i].wait();
+        threadsReader[i]->wait();
     }
 
     for(int i = 0; i < NB_WRITERS; i++) {
-        threadsWriter[i].wait();
+        threadsWriter[i]->wait();
     }
 
     return 0;
