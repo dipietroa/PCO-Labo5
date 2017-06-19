@@ -1,5 +1,4 @@
 #include "waitinglogger.h"
-#include <stdexcept>
 
 WaitingQueue::WaitingQueue(QString name) : name(name), threadNames(){}
 
@@ -13,6 +12,13 @@ bool WaitingQueue::deleteThread(const QString &objectName){
 
 const QString WaitingQueue::getOName(){
     return name;
+}
+
+QString WaitingQueue::getThreadsName(){
+    QString str;
+    for(QString s : threadNames)
+        str.append(QString::fromStdString(s.toStdString() + ", "));
+     return str;
 }
 
 WaitingLogger::WaitingLogger() : mutex()
@@ -33,7 +39,11 @@ QList<WaitingQueue *> WaitingLogger::getQueues() const
 
 void WaitingLogger::updateView()
 {
-    //code affichage
+    for(WaitingQueue* wq : queues){
+        std::cout << wq->getOName().toStdString() << " : "
+                  << wq->getThreadsName().toStdString()
+                  << std::endl;
+    }
 }
 
 void WaitingLogger::addWaiting(const QString &threadName, const QString &objectName){
@@ -46,6 +56,7 @@ void WaitingLogger::addWaiting(const QString &threadName, const QString &objectN
         wq->addThread(threadName);
         queues.push_back(wq);
     }
+    updateView();
     mutex.unlock();
 }
 
@@ -96,5 +107,9 @@ void ReadWriteLogger::removeResourceAccess(const QString &threadName)
 void ReadWriteLogger::updateView()
 {
     WaitingLogger::updateView();
-    //Code affichage
+    std::cout << "In resource : ";
+    for(QString s : resourceAccesses){
+        std::cout << s.toStdString() << ", ";
+    }
+    std::cout << std::endl << std::endl;
 }

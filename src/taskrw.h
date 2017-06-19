@@ -4,6 +4,7 @@
 #include <iostream>
 #include <QThread>
 #include "abstractreaderwriter.h"
+#include "waitinglogger.h"
 
 class TaskReader :public QThread{
 private:

@@ -4,6 +4,8 @@
 #include <QStringList>
 #include <QList>
 #include <QMutex>
+#include <stdexcept>
+#include <iostream>
 
 class WaitingQueue
 {
@@ -16,6 +18,7 @@ public:
     void addThread(const QString& objectName);
     bool deleteThread(const QString& objectName);
     const QString getOName();
+    QString getThreadsName();
 };
 
 class WaitingLogger
