@@ -16,7 +16,12 @@ int main(int argc, char *argv[])
 {
 
     // Create the resource manager object
-    AbstractReaderWriter* resourceManager = new ReaderWriterEqualPrioHoare();
+
+    //Il suffit de changer l'instance concrète readerwriter en choisissant
+    //parmis celles implémentées pour tester un autre protocole lecteur
+    //rédacteur avec une gestion différente des priorités ou un autre type
+    //d'objets de synchronisation
+    AbstractReaderWriter* resourceManager = new ReaderWriterEqualPrioMesa();
 
     // Create the threads
     TaskWriter* threadsWriter[NB_WRITERS];
@@ -26,6 +31,7 @@ int main(int argc, char *argv[])
         threadsReader[i] = new TaskReader(resourceManager);
         threadsReader[i]->setObjectName(QString::fromStdString("R" +  std::to_string(i)));
     }
+
     for(int i = 0; i < NB_WRITERS; i++){
         threadsWriter[i] = new TaskWriter(resourceManager);
         threadsWriter[i]->setObjectName(QString::fromStdString("W" +  std::to_string(i)));
@@ -51,15 +57,13 @@ int main(int argc, char *argv[])
     }
 
     // Kill the threads
+    for(int i = 0; i < NB_READERS; i++) {
+        threadsReader[i].wait();
+    }
+
+    for(int i = 0; i < NB_WRITERS; i++) {
+        threadsWriter[i].wait();
+    }
 
     return 0;
-
-
-
-    // Pour ceux qui voudraient développer une version graphique
-//    QApplication a(argc, argv);
-//    MainWindow w;
-//    w.show();
-
-//    return a.exec();
 }
