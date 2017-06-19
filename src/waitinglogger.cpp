@@ -33,7 +33,7 @@ QList<WaitingQueue *> WaitingLogger::getQueues() const
 
 void WaitingLogger::updateView()
 {
-
+    //code affichage
 }
 
 void WaitingLogger::addWaiting(const QString &threadName, const QString &objectName){
@@ -81,11 +81,12 @@ void ReadWriteLogger::addResourceAccess(const QString &threadName)
 void ReadWriteLogger::removeResourceAccess(const QString &threadName)
 {
     if(resourceAccesses.removeOne(threadName))
-        cout << "Le thread " << threadName << " n'est pas entrain d'accéder à la ressource." << end;
+       throw new std::runtime_error("Le thread " +threadName.toStdString() + " n'est pas entrain d'accéder à la ressource.");
 }
 
 
 void ReadWriteLogger::updateView()
 {
-
+    WaitingLogger::updateView();
+    //Code affichage
 }
