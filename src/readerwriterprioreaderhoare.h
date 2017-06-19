@@ -10,8 +10,6 @@ protected:
     OHoareMonitor hoaremonitor;
 
     int nbReaders;
-    int nbReadersWaiting;
-    int nbWritersWaiting;
     bool oneWriter;
 
 public:
