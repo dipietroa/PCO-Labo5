@@ -22,6 +22,6 @@ void SynchroController::pause()
 void SynchroController::resume()
 {
     mutex.lock();
-    qwcond.wakeAll();
+    qwcond.wakeOne();
     mutex.unlock();
 }

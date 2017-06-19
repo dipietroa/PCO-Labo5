@@ -52,7 +52,8 @@ int main(int argc, char *argv[])
         // Wait for a key press
         char key;
         forever {
-            std::cin.get(key);
+            //std::cin.get(key);
+            key = getchar();
             switch (key) {
             case ENTER:
                 SynchroController::getInstance()->resume();
