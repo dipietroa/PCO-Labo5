@@ -8,12 +8,15 @@
 #include "taskrw.h"
 #include "abstractreaderwriter.h"
 #include "readerwriterprioreaderssem.h"
+#include "readerwriterequalpriosem.h"
+#include "readerwriterequalpriomesa.h"
+#include "readerwriterequalpriohoare.h"
 
 int main(int argc, char *argv[])
 {
 
     // Create the resource manager object
-    AbstractReaderWriter* resourceManager = new ReaderWriterPrioReadersSem();
+    AbstractReaderWriter* resourceManager = new ReaderWriterEqualPrioHoare();
 
     // Create the threads
     TaskWriter* threadsWriter[NB_WRITERS];

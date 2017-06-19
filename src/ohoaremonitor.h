@@ -9,8 +9,7 @@
 
 class OHoareMonitor
 {
-protected:
-
+public:
     class Condition
     {
         friend OHoareMonitor;
@@ -21,7 +20,6 @@ protected:
         int nbWaiting;
     };
 
-public:
     OHoareMonitor(QString name);
 
     /**

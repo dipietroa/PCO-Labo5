@@ -1,10 +1,7 @@
 #include "readerwriterequalpriosem.h"
 
-ReaderWriterEqualPrioSem::ReaderWriterEqualPrioSem() : mutex(1),
-                                                  nbAttenteA(0),
-                                                  nbAttenteB(0),
-                                                  nbA(0),
-                                                  nbB(0) {}
+ReaderWriterEqualPrioSem::ReaderWriterEqualPrioSem() : mutex(1, "mutex"), attenteA(0, "attenteLecteur"), attenteB(0, "attenteRedacteur"),
+                                                        nbAttenteA(0), nbAttenteB(0), nbA(0), nbB(0) {}
 
 void ReaderWriterEqualPrioSem::lockReading() {
     mutex.acquire();
