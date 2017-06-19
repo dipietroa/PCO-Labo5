@@ -48,32 +48,30 @@ int main(int argc, char *argv[])
         threadsWriter[i]->start();
 
     bool continuing = true;
+    char key;
 
     while (continuing) {
         // Wait for a key press
-        char key;
-        forever {
-            //std::cin.get(key);
-            key = getchar();
-            switch (key) {
+        std::cin.get(key);
+        switch (key) {
             case ENTER:
                 SynchroController::getInstance()->resume();
                 break;
             case ESC:
-                return EXIT_SUCCESS;
+                continuing = false;
                 break;
-            }
         }
+
     }
 
     // Kill the threads
     for(int i = 0; i < NB_READERS; i++) {
-        threadsReader[i]->wait();
+        threadsReader[i]->terminate();
     }
 
     for(int i = 0; i < NB_WRITERS; i++) {
-        threadsWriter[i]->wait();
+        threadsWriter[i]->terminate();
     }
 
-    return 0;
+    return EXIT_SUCCESS;
 }
