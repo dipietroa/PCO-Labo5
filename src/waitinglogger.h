@@ -3,6 +3,7 @@
 
 #include <QStringList>
 #include <QList>
+#include <QMutex>
 
 class WaitingQueue
 {
@@ -53,6 +54,7 @@ protected:
 
 private:
     WaitingQueue* getQueueByObjName(const QString& objectName);
+    QMutex mutex;
 
 };
 
@@ -80,6 +82,8 @@ protected:
     virtual void updateView();
 
     QStringList resourceAccesses;
+private:
+    QMutex mutexAccess;
 
 };
 

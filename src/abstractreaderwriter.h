@@ -1,7 +1,6 @@
 #ifndef ABSTRACTREADERWRITER_H
 #define ABSTRACTREADERWRITER_H
 
-#endif // ABSTRACTREADERWRITER_H
 class AbstractReaderWriter {
 public:
     AbstractReaderWriter();
@@ -11,3 +10,5 @@ public:
     virtual void unlockReading() = 0;
     virtual void unlockWriting() = 0;
 };
+
+#endif // ABSTRACTREADERWRITER_H

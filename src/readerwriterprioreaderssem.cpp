@@ -1,9 +1,14 @@
 #include "readerwriterprioreaderssem.h"
 
-ReaderWriterPrioReadersSem::ReaderWriterPrioReadersSem() : mutexReaders(1),
-                                                     mutexWriters(1),
-                                                     writer(1),
+ReaderWriterPrioReadersSem::ReaderWriterPrioReadersSem() : mutexReaders(1, QString::fromStdString("mutexReaders")),
+                                                     mutexWriters(1, QString::fromStdString("mutexWriters")),
+                                                     writer(1, QString::fromStdString("writer")),
                                                      nbReaders(0){}
+
+ReaderWriterPrioReadersSem::~ReaderWriterPrioReadersSem(){
+
+}
+
 void ReaderWriterPrioReadersSem::lockReading(){
     mutexReaders.acquire();
     nbReaders++;

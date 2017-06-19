@@ -8,6 +8,7 @@ class ReaderWriterPrioReadersSem : public AbstractReaderWriter
 {
 public:
     ReaderWriterPrioReadersSem();
+    ~ReaderWriterPrioReadersSem();
     void lockReading();
     void lockWriting();
     void unlockReading();

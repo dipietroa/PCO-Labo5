@@ -15,7 +15,7 @@ const QString WaitingQueue::getOName(){
     return name;
 }
 
-WaitingLogger::WaitingLogger()
+WaitingLogger::WaitingLogger() : mutex()
 {
 
 }
@@ -37,6 +37,7 @@ void WaitingLogger::updateView()
 }
 
 void WaitingLogger::addWaiting(const QString &threadName, const QString &objectName){
+    mutex.lock();
     WaitingQueue* wq = getQueueByObjName(objectName);
     if(wq != nullptr)
         wq->addThread(threadName);
@@ -45,14 +46,17 @@ void WaitingLogger::addWaiting(const QString &threadName, const QString &objectN
         wq->addThread(threadName);
         queues.push_back(wq);
     }
+    mutex.unlock();
 }
 
 void WaitingLogger::removeWaiting(const QString &threadName, const QString &objectName){
+    mutex.lock();
     WaitingQueue* wq = getQueueByObjName(objectName);
     if(wq != nullptr)
-        if(wq->deleteThread(threadName))
+        if(!wq->deleteThread(threadName))
             throw new std::runtime_error("Erreur, le thread '" +threadName.toStdString() +
                                          "' n'est pas en attente sur '" + objectName.toStdString() +"' !");
+    mutex.unlock();
 }
 
 WaitingQueue* WaitingLogger::getQueueByObjName(const QString &objectName){
@@ -68,20 +72,24 @@ QStringList ReadWriteLogger::getResourceAccesses() const
     return resourceAccesses;
 }
 
-ReadWriteLogger::ReadWriteLogger()
+ReadWriteLogger::ReadWriteLogger() : mutexAccess()
 {
 
 }
 
 void ReadWriteLogger::addResourceAccess(const QString &threadName)
 {
+    mutexAccess.lock();
     resourceAccesses.push_back(threadName);
+    mutexAccess.unlock();
 }
 
 void ReadWriteLogger::removeResourceAccess(const QString &threadName)
 {
-    if(resourceAccesses.removeOne(threadName))
+    mutexAccess.lock();
+    if(!resourceAccesses.removeOne(threadName))
        throw new std::runtime_error("Le thread " +threadName.toStdString() + " n'est pas entrain d'accéder à la ressource.");
+    mutexAccess.unlock();
 }
 
 
