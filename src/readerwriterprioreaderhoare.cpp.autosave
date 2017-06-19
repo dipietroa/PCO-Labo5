@@ -1,0 +1,74 @@
+#include "readerwriterprioreaderhoare.h"
+
+ReaderWriterPrioReaderHoare::ReaderWriterPrioReaderHoare() :
+    hoaremonitor("waitMonitor"),
+    nbReaders(0),
+    oneWriter(false){
+}
+
+void ReaderWriterPrioReaderHoare::lockReading() {
+    SynchroController::getInstance()->pause();
+    hoaremonitor.monitorIn();
+
+    if (oneWriter) {
+        hoaremonitor.wait(readerBlocker);
+        hoaremonitor.signal(readerBlocker);
+    }
+    else {
+        nbReaders++;
+        hoaremonitor.monitorOut();
+    }
+
+    ((ReadWriteLogger*)WaitingLogger::getInstance())->addResourceAccess(QThread::currentThread()->objectName());
+}
+
+void ReaderWriterPrioReaderHoare::lockWriting(){
+    SynchroController::getInstance()->pause();
+    hoaremonitor.monitorIn();
+    if (oneWriter || (nbReaders>0) || (nbReadersWaiting>0)) {
+        
+        hoaremonitor.wait(writerBlocker);
+        hoaremonitor.signal(writerBlocker);
+    }
+    else {
+        oneWriter=true;
+        hoaremonitor.monitorOut();
+    }
+    ((ReadWriteLogger*)WaitingLogger::getInstance())->addResourceAccess(QThread::currentThread()->objectName());
+}
+
+void ReaderWriterPrioReaderHoare::unlockReading(){
+    SynchroController::getInstance()->pause();
+    ((ReadWriteLogger*)WaitingLogger::getInstance())->removeResourceAccess(QThread::currentThread()->objectName());
+    hoaremonitor.monitorIn();
+    nbReaders--;
+    if (nbReaders==0) {
+        if (nbWritersWaiting>0) {
+            oneWriter=true;
+            writerBlocker.wait(&mutex);
+        }
+    }
+    hoaremonitor.monitorOut();
+}
+
+void ReaderWriterPrioReaderHoare::unlockWriting(){
+    SynchroController::getInstance()->pause();
+    ((ReadWriteLogger*)WaitingLogger::getInstance())->removeResourceAccess(QThread::currentThread()->objectName());
+    mutex.lock();
+    oneWriter=false;
+    if (nbReadersWaiting>0)
+    {
+            readerBlocker.wakeAll();
+        nbReaders=nbReadersWaiting;
+        nbReadersWaiting=0;
+    }
+    else {
+        if (nbWritersWaiting>0) {
+            oneWriter=true;
+            nbWritersWaiting--;
+            writerBlocker.wait(&mutex);
+        }
+    }
+    mutex.unlock();
+}
+
