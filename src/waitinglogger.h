@@ -14,10 +14,37 @@ private:
     QStringList threadNames;
 
 public:
+    /**
+     * @brief Constructeur
+     * @param name
+     */
     WaitingQueue(QString name);
+
+    /**
+     * @brief addThread - ajoute un thread à la file d'attente
+     * @param objectName
+     */
     void addThread(const QString& objectName);
+
+    /**
+     * @brief deleteThread - supprime un thread de la file d'attente
+     * @param objectName
+     * @return
+     */
     bool deleteThread(const QString& objectName);
+
+    /**
+     * @brief getOName - retourne le nom de l'objet de synchronisation
+     *        auquel est lié la file
+     * @return
+     */
     const QString getOName();
+
+    /**
+     * @brief getThreadsName - récupère le nom des threads en attente
+     *        sur l'objet de synchronisation
+     * @return
+     */
     QString getThreadsName();
 };
 
@@ -34,8 +61,22 @@ public:
     static WaitingLogger *getInstance();
 
 
+    /**
+     * @brief addWaiting - référence le thread qualifié par "threadName"
+     *                     comme étant en attente sur l'objet de synchro
+     *                     qualifié par "objectName"
+     * @param threadName
+     * @param objectName
+     */
     void addWaiting(const QString& threadName,const QString& objectName);
 
+
+    /**
+     * @brief addWaiting - supprime la référence du thread qualifié par "threadName"
+     *                     de la liste d'attente sur l'objet qualifié par "objectName"
+     * @param threadName
+     * @param objectName
+     */
     void removeWaiting(const QString& threadName,const QString& objectName);
 
 
@@ -56,6 +97,12 @@ protected:
     QList<WaitingQueue *> queues;
 
 private:
+    /**
+     * @brief getQueueByObjName - Récupère la file d'attente de l'objet de
+     *                            synchro "objectName"
+     * @param objectName
+     * @return
+     */
     WaitingQueue* getQueueByObjName(const QString& objectName);
     QMutex mutex;
 
@@ -69,7 +116,18 @@ public:
 
     QStringList getResourceAccesses() const;
 
+    /**
+     * @brief addResourceAccess - Référence le thread "threadName" comme ayant
+     *                            accès à la ressource
+     * @param threadName
+     */
     void addResourceAccess(const QString &threadName);
+
+    /**
+     * @brief removeResourceAccess - Supprime la référence disant que "threadName"
+     *                               a accès à la ressource
+     * @param threadName
+     */
     void removeResourceAccess(const QString &threadName);
 
 protected:

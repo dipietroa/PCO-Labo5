@@ -1,6 +1,8 @@
 #ifndef READERWRITERPRIOREADERHOARE_H
 #define READERWRITERPRIOREADERHOARE_H
-
+#include "ohoaremonitor.h"
+#include "abstractreaderwriter.h"
+#include "synchrocontroller.h"
 
 class ReaderWriterPrioReaderHoare : public AbstractReaderWriter
 {

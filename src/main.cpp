@@ -23,11 +23,12 @@ int main(int argc, char *argv[])
     //parmis celles implémentées pour tester un autre protocole lecteur
     //rédacteur avec une gestion différente des priorités ou un autre type
     //d'objets de synchronisation
-    AbstractReaderWriter* resourceManager = new ReaderWriterEqualPrioMesa();
+    AbstractReaderWriter* resourceManager = new ReaderWriterPrioReadersSem();
 
     // Create the threads
     TaskWriter* threadsWriter[NB_WRITERS];
     TaskReader* threadsReader[NB_READERS];
+
 
     for(int i = 0; i < NB_READERS; i++){
         threadsReader[i] = new TaskReader(resourceManager);
@@ -47,37 +48,30 @@ int main(int argc, char *argv[])
         threadsWriter[i]->start();
 
     bool continuing = true;
+    char key;
 
     while (continuing) {
         // Wait for a key press
-        char key;
-        forever {
-            std::cin.get(key);
-            switch (key) {
+        std::cin.get(key);
+        switch (key) {
             case ENTER:
                 SynchroController::getInstance()->resume();
                 break;
             case ESC:
-                return EXIT_SUCCESS;
+                continuing = false;
                 break;
-            }
         }
 
-        // If key is <enter>
-        SynchroController::getInstance()->resume();
-
-        // If key was <esc>
-        continuing = true;
     }
 
     // Kill the threads
     for(int i = 0; i < NB_READERS; i++) {
-        threadsReader[i].wait();
+        threadsReader[i]->terminate();
     }
 
     for(int i = 0; i < NB_WRITERS; i++) {
-        threadsWriter[i].wait();
+        threadsWriter[i]->terminate();
     }
 
-    return 0;
+    return EXIT_SUCCESS;
 }
