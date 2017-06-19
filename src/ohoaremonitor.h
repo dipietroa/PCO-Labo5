@@ -7,9 +7,19 @@
 #include <QThread>
 #include "waitinglogger.h"
 
+/**
+ * @brief Moniteur de Hoare avec gestion de logs
+ *        pour connaître les threads en attente sur
+ *        le moniteur
+ */
 class OHoareMonitor
 {
 public:
+    /**
+     * @brief Condition utilisée par le moniteur de hoare
+     *        permettant de signaler des threads attendant
+     *        sur cette condition
+     */
     class Condition
     {
         friend OHoareMonitor;

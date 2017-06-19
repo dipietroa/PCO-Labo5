@@ -29,6 +29,7 @@ int main(int argc, char *argv[])
     TaskWriter* threadsWriter[NB_WRITERS];
     TaskReader* threadsReader[NB_READERS];
 
+
     for(int i = 0; i < NB_READERS; i++){
         threadsReader[i] = new TaskReader(resourceManager);
         threadsReader[i]->setObjectName(QString::fromStdString("R" +  std::to_string(i)));

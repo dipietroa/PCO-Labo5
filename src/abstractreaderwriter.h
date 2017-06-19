@@ -22,8 +22,20 @@ public:
      * @brief lockReading - vérouille l'accès pour le lecteur
      */
     virtual void lockReading() = 0;
+
+    /**
+     * @brief lockWriting - vérouille l'accès pour le rédacteur
+     */
     virtual void lockWriting() = 0;
+
+    /**
+     * @brief unlockReading - un lecteur dévérouille l'accès
+     */
     virtual void unlockReading() = 0;
+
+    /**
+     * @brief unlockWriting - un rédacteur dévérouille l'accès
+     */
     virtual void unlockWriting() = 0;
 };
 
