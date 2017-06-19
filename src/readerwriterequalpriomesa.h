@@ -4,6 +4,7 @@
 #include "omutex.h"
 #include "owaitcondition.h"
 #include "abstractreaderwriter.h"
+#include "synchrocontroller.h"
 
 class ReaderWriterEqualPrioMesa : public AbstractReaderWriter
 {

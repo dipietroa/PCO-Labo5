@@ -3,6 +3,7 @@
 
 #include "ohoaremonitor.h"
 #include "abstractreaderwriter.h"
+#include "synchrocontroller.h"
 
 class ReaderWriterEqualPrioHoare : public AbstractReaderWriter
 {

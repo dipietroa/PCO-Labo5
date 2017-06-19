@@ -3,6 +3,7 @@
 
 #include "osemaphore.h"
 #include "abstractreaderwriter.h"
+#include "synchrocontroller.h"
 
 class ReaderWriterPrioReadersSem : public AbstractReaderWriter
 {

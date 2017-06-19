@@ -1,6 +1,6 @@
 #include "synchrocontroller.h"
 
-SynchroController::SynchroController()
+SynchroController::SynchroController() : mutex(), qwcond()
 {
 
 }
@@ -14,10 +14,14 @@ SynchroController *SynchroController::getInstance()
 
 void SynchroController::pause()
 {
-
+    mutex.lock();
+    qwcond.wait(&mutex);
+    mutex.unlock();
 }
 
 void SynchroController::resume()
 {
-
+    mutex.lock();
+    qwcond.wakeOne();
+    mutex.unlock();
 }

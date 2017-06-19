@@ -2,6 +2,7 @@
 #define READERWRITEREQUALPRIOSEM_H
 #include "abstractreaderwriter.h"
 #include "osemaphore.h"
+#include "synchrocontroller.h"
 
 class ReaderWriterEqualPrioSem : public AbstractReaderWriter
 {

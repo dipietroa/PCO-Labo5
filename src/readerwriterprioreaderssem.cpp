@@ -15,11 +15,12 @@ ReaderWriterPrioReadersSem::~ReaderWriterPrioReadersSem(){
 }
 
 void ReaderWriterPrioReadersSem::lockReading(){
+    SynchroController::getInstance()->pause();
     mutex.acquire();
 
     if (oneWriter) {
         nbReadersWaiting++;
-        mutex.release(); // ouverture
+        mutex.release();
         readerBlocker.acquire();
     }
     else {
@@ -31,10 +32,11 @@ void ReaderWriterPrioReadersSem::lockReading(){
 }
 
 void ReaderWriterPrioReadersSem::lockWriting(){
+    SynchroController::getInstance()->pause();
     mutex.acquire();
     if (oneWriter || (nbReaders>0) || (nbReadersWaiting>0)) {
         nbWritersWaiting++;
-        mutex.release(); // ouverture
+        mutex.release();
         writerBlocker.acquire();
     }
     else {
@@ -45,6 +47,7 @@ void ReaderWriterPrioReadersSem::lockWriting(){
 }
 
 void ReaderWriterPrioReadersSem::unlockReading(){
+    SynchroController::getInstance()->pause();
     ((ReadWriteLogger*)WaitingLogger::getInstance())->removeResourceAccess(QThread::currentThread()->objectName());
     mutex.acquire();
     nbReaders--;
@@ -59,6 +62,7 @@ void ReaderWriterPrioReadersSem::unlockReading(){
 }
 
 void ReaderWriterPrioReadersSem::unlockWriting(){
+    SynchroController::getInstance()->pause();
     ((ReadWriteLogger*)WaitingLogger::getInstance())->removeResourceAccess(QThread::currentThread()->objectName());
     mutex.acquire();
     oneWriter=false;

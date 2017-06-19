@@ -23,29 +23,28 @@ public:
     OHoareMonitor(QString name);
 
     /**
-     * This function has to be called at the beginning of each function being
-     * an entry point to the monitor.
+     * Cette fonction doit être appelée au début de chaque fonction étant
+     * un point d'entrée du moniteur
      */
     void monitorIn();
 
     /**
-     * This function has to be called at the end of each function being
-     * an entry point to the monitor.
+     * Cette fonction doit être appelée à la fin de chaque fonction étant
+     * un point d'entrée du moniteur
      */
     void monitorOut();
 
     /**
-     * This function implements the waiting on a condition, as defined by Hoare.
-     * When the thread is waken by a signal, it continues with the mutual
-     * exclusion.
+     * Cette fonction implémente l'attente sur une condition.
+     * Lorsqu'un thread est réveillé par le signal, il continue
+     * avec l'exclusion mutuelle
      */
     void wait(Condition &cond);
 
     /**
-     * This function implements the signaling of a condition, as defined by
-     * Hoare. If no thread is waiting for the condition, then nothing happens,
-     * but if there is one the thread calling signal is suspended, waiting for
-     * the other one to finish.
+     * Cette fonction implémente le signal d'une condition. Si aucun thread attendait sur la condition,
+     * alors rien ne se passe. Si ce n'est pas le cas, le thread appelant se suspend et attend la fin
+     * de l'exécution du thread réveillé par le signal
      */
     void signal(Condition &cond);
 

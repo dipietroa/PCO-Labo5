@@ -4,6 +4,7 @@ ReaderWriterEqualPrioSem::ReaderWriterEqualPrioSem() : mutex(1, "mutex"), attent
                                                         nbAttenteA(0), nbAttenteB(0), nbA(0), nbB(0) {}
 
 void ReaderWriterEqualPrioSem::lockReading() {
+    SynchroController::getInstance()->pause();
     mutex.acquire();
     if (nbB > 0) {
         nbAttenteA ++;
@@ -14,9 +15,12 @@ void ReaderWriterEqualPrioSem::lockReading() {
         nbA ++;
         mutex.release();
     }
+    ((ReadWriteLogger*)WaitingLogger::getInstance())->addResourceAccess(QThread::currentThread()->objectName());
 }
 
 void ReaderWriterEqualPrioSem::unlockReading() {
+    SynchroController::getInstance()->pause();
+    ((ReadWriteLogger*)WaitingLogger::getInstance())->removeResourceAccess(QThread::currentThread()->objectName());
     mutex.acquire();
     nbA --;
     if (nbA == 0) {
@@ -29,6 +33,7 @@ void ReaderWriterEqualPrioSem::unlockReading() {
 }
 
 void ReaderWriterEqualPrioSem::lockWriting() {
+    SynchroController::getInstance()->pause();
     mutex.acquire();
     if (nbA > 0) {
         nbAttenteB ++;
@@ -39,10 +44,12 @@ void ReaderWriterEqualPrioSem::lockWriting() {
         nbB ++;
         mutex.release();
     }
-
+    ((ReadWriteLogger*)WaitingLogger::getInstance())->addResourceAccess(QThread::currentThread()->objectName());
 }
 
 void ReaderWriterEqualPrioSem::unlockWriting() {
+    ((ReadWriteLogger*)WaitingLogger::getInstance())->removeResourceAccess(QThread::currentThread()->objectName());
+    SynchroController::getInstance()->pause();
     mutex.acquire();
     nbB --;
     if (nbB == 0) {
