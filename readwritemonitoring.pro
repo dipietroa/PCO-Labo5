@@ -21,7 +21,9 @@ SOURCES += src/main.cpp\
     src/readerwriterprioreaderssem.cpp \
     src/readerwriterequalpriosem.cpp \
     src/readerwriterequalpriomesa.cpp \
-    src/readerwriterequalpriohoare.cpp
+    src/readerwriterequalpriohoare.cpp \
+    src/readerwriterprioreadermesa.cpp \
+    src/readerwriterprioreaderhoare.cpp
 
 HEADERS  +=  \
     src/waitinglogger.h \
@@ -35,4 +37,6 @@ HEADERS  +=  \
     src/taskrw.h \
     src/readerwriterequalpriosem.h \
     src/readerwriterequalpriomesa.h \
-    src/readerwriterequalpriohoare.h
+    src/readerwriterequalpriohoare.h \
+    src/readerwriterprioreadermesa.h \
+    src/readerwriterprioreaderhoare.h
