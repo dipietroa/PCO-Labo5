@@ -62,12 +62,6 @@ int main(int argc, char *argv[])
                 break;
             }
         }
-
-        // If key is <enter>
-        SynchroController::getInstance()->resume();
-
-        // If key was <esc>
-        continuing = true;
     }
 
     // Kill the threads
