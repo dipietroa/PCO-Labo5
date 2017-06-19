@@ -2,6 +2,11 @@
 #define READERWRITERPRIOREADERHOARE_H
 
 
+/**
+ * @brief The ReaderWriterPrioReadersHoare class : 
+ * classe qui implémente un lecteur-redacteur avec priorité 
+ * aux rédacteurs à l'aide d'un moniteur de Hoare.
+ */
 class ReaderWriterPrioReaderHoare : public AbstractReaderWriter
 {
 protected:
@@ -10,9 +15,12 @@ protected:
     OHoareMonitor hoaremonitor;
 
     int nbReaders;
-    bool oneWriter;
+    bool oneWriter; //booléen qui détérmine si il y a un Writer 
 
 public:
+    /**
+     * @brief ReaderWriterPrioReaderHoare constructeur de la classe
+     */
     ReaderWriterPrioReaderHoare();
 
     /**
