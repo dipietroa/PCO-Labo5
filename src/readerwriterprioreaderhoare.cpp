@@ -57,6 +57,10 @@ void ReaderWriterPrioReaderHoare::unlockWriting(){
     hoaremonitor.monitorIn();
     oneWriter=false;
     hoaremonitor.signal(readerBlocker);
+    if (nbReaders>0)
+    {
+             hoaremonitor.signal(readerBlocker);
+    }
     else {
             oneWriter=true;
             hoaremonitor.wait(writerBlocker);
