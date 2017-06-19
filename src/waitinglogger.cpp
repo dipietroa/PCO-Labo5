@@ -75,12 +75,13 @@ ReadWriteLogger::ReadWriteLogger()
 
 void ReadWriteLogger::addResourceAccess(const QString &threadName)
 {
-
+    resourceAccesses.push_back(threadName);
 }
 
 void ReadWriteLogger::removeResourceAccess(const QString &threadName)
 {
-
+    if(resourceAccesses.removeOne(threadName))
+        cout << "Le thread " << threadName << " n'est pas entrain d'accéder à la ressource." << end;
 }
 
 
