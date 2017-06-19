@@ -9,6 +9,8 @@ ReaderWriterPrioReaderMesa::ReaderWriterPrioReaderMesa() :
     writerBlocker("writerBlocker"),
     oneWriter(false) {}
 
+ReaderWriterPrioReaderMesa::~ReaderWriterPrioReaderMesa(){}
+
 void ReaderWriterPrioReaderMesa::lockReading() {
     SynchroController::getInstance()->pause();
     mutex.lock();
