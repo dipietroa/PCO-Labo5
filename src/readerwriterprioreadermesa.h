@@ -46,12 +46,12 @@ public:
      */
     void unlockWriting();
 protected:
-    OMutex mutex;
+    OMutex mutex; //exclusion mutuelle
     OWaitCondition readerBlocker;
     OWaitCondition writerBlocker;
-    int nbReaders;
-    int nbReadersWaiting;
-    int nbWritersWaiting;
+    int nbReaders; // nombre de lecteur actifs
+    int nbReadersWaiting; //nombre de lecteur en attente
+    int nbWritersWaiting; // nombre de redacteurs en attente
     bool oneWriter; //booléen qui détérmine si il y a un Writer
 
 };

@@ -39,12 +39,12 @@ public:
      */
     void unlockWriting();
 protected:
-    OSemaphore mutex;
-    OSemaphore readerBlocker;
-    OSemaphore writerBlocker;
-    int nbReaders;
-    int nbReadersWaiting;
-    int nbWritersWaiting;
+    OSemaphore mutex; //exclusion mutuelle
+    OSemaphore readerBlocker; //semaphore pour attente des lecteurs
+    OSemaphore writerBlocker; //semaphore pour l attente des redacteurs
+    int nbReaders; // nombre de lecteur actifs
+    int nbReadersWaiting; //nombre de lecteur en attente
+    int nbWritersWaiting; // nombre de redacteurs en attente
     bool oneWriter; //booléen qui détérmine si il y a un Writer
 
 };
