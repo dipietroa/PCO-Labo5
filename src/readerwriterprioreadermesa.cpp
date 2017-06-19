@@ -2,12 +2,14 @@
 
 ReaderWriterPrioReaderMesa::ReaderWriterPrioReaderMesa() :
     mutex("mutex"),
+    readerBlocker("readerBlocker"),
+    writerBlocker("writerBlocker"),
     nbReaders(0),
     nbReadersWaiting(0),
     nbWritersWaiting(0),
-    readerBlocker("readerBlocker"),
-    writerBlocker("writerBlocker"),
     oneWriter(false) {}
+
+ReaderWriterPrioReaderMesa::~ReaderWriterPrioReaderMesa(){}
 
 void ReaderWriterPrioReaderMesa::lockReading() {
     SynchroController::getInstance()->pause();
