@@ -3,22 +3,17 @@
 
 #define NB_WRITERS 1
 #define NB_READERS 3
-#define ENTER 10
-#define ESC 27
 
 #include "synchrocontroller.h"
 #include "taskrw.h"
 #include "abstractreaderwriter.h"
 #include "readerwriterprioreaderssem.h"
-#include "readerwriterequalpriosem.h"
-#include "readerwriterequalpriomesa.h"
-#include "readerwriterequalpriohoare.h"
 
 int main(int argc, char *argv[])
 {
 
     // Create the resource manager object
-    AbstractReaderWriter* resourceManager = new ReaderWriterEqualPrioHoare();
+    AbstractReaderWriter* resourceManager = new ReaderWriterPrioReadersSem();
 
     // Create the threads
     TaskWriter* threadsWriter[NB_WRITERS];
@@ -45,16 +40,8 @@ int main(int argc, char *argv[])
     while (continuing) {
         // Wait for a key press
         char key;
-        forever {
-            std::cin.get(key);
-            switch (key) {
-            case ENTER:
-                SynchroController::getInstance()->resume();
-                break;
-            case ESC:
-                return EXIT_SUCCESS;
-                break;
-            }
+        while(key = std::getchar()){
+            std::cout << (int)key << std::endl;
         }
 
         // If key is <enter>
